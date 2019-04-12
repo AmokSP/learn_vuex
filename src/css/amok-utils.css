@@ -1,0 +1,54 @@
+.text-s {
+    font-size: 0.8rem;
+}
+.text-m {
+    font-size: 1rem;
+}
+.text-l {
+    font-size: 1.4rem;
+}
+.text-xl {
+    font-size: 2rem;
+}
+.text-bold {
+    font-weight: bold;
+}
+.text-light {
+    color:#bbb;
+}
+.text-danger {
+    color:red;
+}
+.text-white {
+    color:#fff;
+}
+
+.text-primary {
+    color:rgb(0, 119, 255);
+}
+
+
+.bg-primary {
+    background: rgb(0, 119, 255);
+}
+
+.bg-white {
+    background: #fff;
+}
+
+
+.round {
+    border-radius: 50%;
+}
+
+
+.btn {
+    padding: 0.5rem 2rem;
+    display: inline-block;
+    font-size: 1.25rem;
+    border-radius: 2px;
+}
+
+.btn-success {
+    background: rgb(0, 219, 29);
+}
