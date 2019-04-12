@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import StoreDetail from '@/pages/StoreDetail'
+import ProductList from '@/pages/ProductList'
 
 Vue.use(Router)
 
@@ -9,7 +9,7 @@ export default new Router({
     {
       path: '/',
       name: 'StoreDetail',
-      component: StoreDetail
+      component: ProductList
     }
   ]
 })

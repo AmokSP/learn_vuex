@@ -198,12 +198,13 @@ export default {
 #hotList {
   overflow-x: scroll;
   padding-bottom: 1rem;
-  justify-content: space-between;
+  vertical-align: bottom;
   white-space: nowrap;
 }
 
 .hotListItem {
   display: inline-block;
+  vertical-align: top;
   width: 10rem;
   height: 15rem;
   margin-right: 1rem;
