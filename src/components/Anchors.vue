@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import Uitls from "@/Utils"
 export default {
   data() {
     return {
@@ -17,7 +18,14 @@ export default {
         window.pageYOffset ||
         document.documentElement.scrollTop ||
         document.body.scrollTop;
-        
+
+      let anchorPos = this.linkElements.map(item => {
+        let elm = document.getElementById(item);
+        return Utils.getPosition(elm);
+      });
+       console.log(anchorPos.findIndex((item,index,arr)=>{
+         return scrollTop<item;
+       }));
     }
   },
   mounted() {
