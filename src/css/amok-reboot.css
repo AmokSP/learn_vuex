@@ -8,6 +8,17 @@
     font-weight: normal;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color:inherit;
+}
+
+a:link {
+    color:inherit;
+}
 
 html, body {
     font-family: Helvetica, Arial, sans-serif;

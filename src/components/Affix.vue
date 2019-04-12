@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     offsetInPX() {
-      if (typeof this.offset === 'string') {
+      if (typeof this.offset === "string") {
         if (/px$/i.test(this.offset)) {
           return Number.parseFloat(this.offset.replace(/px/i, ""));
         } else if (/rem$/i.test(this.offset)) {
@@ -53,11 +53,13 @@ export default {
     }
   },
   methods: {
-    handleScroll() {
+    handleScroll(e) {
+      // e.stopImmediatePropagation();
       this.scrollTop =
         window.pageYOffset ||
         document.documentElement.scrollTop ||
         document.body.scrollTop;
+
       if (this.scrollTop >= this.offsetTop - this.offsetInPX) {
         this.slotFixed = true;
       } else {
@@ -85,6 +87,7 @@ export default {
 .affix_wrap {
   position: relative;
 }
+
 
 .affix_seizer {
   position: relative;

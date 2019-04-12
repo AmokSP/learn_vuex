@@ -13,7 +13,7 @@
           <i style="margin:0 0.5rem;">|</i>
           <span>月售{{info.comment_count}}</span>
           <i style="margin:0 0.5rem;">|</i>
-          <span>蜂鸟配送约{{info.eta}}分钟</span>
+          <span>配送约{{info.eta}}分钟</span>
         </span>
       </div>
     </div>
@@ -32,7 +32,23 @@
         ></div>
         <div style="padding:0.5rem;">
           <div>{{item.name}}</div>
-          <div class="text-l text-danger">￥{{item.price}}</div>
+          <div style="margin-top:0.5rem;position:relative;">
+            <span class="text-l text-danger">￥{{item.price}}</span>
+
+            <div class="editor text-xl" style="padding:0;">
+              <i
+                class="fa fa-minus-circle minus text-primary"
+                :class="{show:$store.getters.hasItem(item.id)}"
+                @click="$store.commit('removeItem',item.id)"
+              ></i>
+              <span
+                class="text-l"
+                style="margin:0 0.2rem;"
+                v-show="$store.getters.hasItem(item.id)"
+              >{{$store.getters.itemCount(item.id)}}</span>
+              <i class="fa fa-plus-circle plus text-primary" @click="addItem(item)"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -41,16 +57,26 @@
         <div class="typeList">
           <div>
             <Affix :offset="affix1Height">
-              <anchor-link class="typeItem" v-for="(item, key,index) in typeList" :key="index">
-                <span>{{key}}</span>
-                <span>{{$store.getters.typeCount(key)}}</span>
-              </anchor-link>
+              <anchors>
+                <anchor-link
+                  :href="'#anchor'+key"
+                  v-for="(item, key,index) in typeList"
+                  :key="index"
+                  label
+                  :offset="affix1Height"
+                >
+                  <div class="typeItem">
+                    <span>{{key}}</span>
+                    <span>{{$store.getters.typeCount(key)}}</span>
+                  </div>
+                </anchor-link>
+              </anchors>
             </Affix>
           </div>
         </div>
         <div class="list">
           <div v-for="(item,key, index) in typeList" :key="index">
-            <Affix :offset="affix1Height">
+            <Affix :offset="affix1Height" :id="'anchor'+key">
               <div class="itemCategory">{{key}}</div>
             </Affix>
             <div class="listItem" v-for="(subitem, subindex) in item" :key="subindex">
@@ -64,10 +90,10 @@
                   <span class="text-danger">{{subitem.price}}</span>
                 </div>
               </div>
-              <div class="editor">
+              <div class="editor text-xl">
                 <i
-                  class="fa fa-minus-circle text-l text-primary"
-                  v-show="$store.getters.hasItem(subitem.id)"
+                  class="fa fa-minus-circle text-primary minus"
+                  :class="{show:$store.getters.hasItem(subitem.id)}"
                   @click="$store.commit('removeItem',subitem.id)"
                 ></i>
                 <span
@@ -75,7 +101,7 @@
                   style="margin:0 0.8rem;"
                   v-show="$store.getters.hasItem(subitem.id)"
                 >{{$store.getters.itemCount(subitem.id)}}</span>
-                <i class="fa fa-plus-circle text-l text-primary" @click="addItem(subitem)"></i>
+                <i class="fa fa-plus-circle text-primary plus" @click="addItem(subitem)"></i>
               </div>
             </div>
           </div>
@@ -84,18 +110,19 @@
       <div id="cashier" class="text-white">
         <span class="text-danger text-xl text-bold">￥{{$store.getters.totalPrice}}</span>
         <span>共{{$store.getters.totalItemCount}}件商品</span>
-        <div class="btn btn-success" style="float:right;">去支付</div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import Affix from "../components/Affix";
-import AnchorLink from "../components/AnchorLink";
 import Mock from "../StoreServ";
+import AnchorLink from "../components/AnchorLink";
+import Anchors from "../components/Anchors";
 export default {
   components: {
     Affix,
+    Anchors,
     AnchorLink
   },
   data() {
@@ -104,7 +131,7 @@ export default {
       productList: [],
       searchBarFixed: false,
       offsetTop: 0,
-      affix1Height:'0px',
+      affix1Height: "0px"
     };
   },
   methods: {
@@ -118,7 +145,9 @@ export default {
     },
     typeList() {
       let sorted = {};
-      this.productList.forEach(item => {
+      this.productList.forEach((item, index) => {
+        item.id = index;
+
         if (sorted.hasOwnProperty(item.type)) {
           sorted[item.type].push(item);
         } else {
@@ -144,7 +173,7 @@ export default {
     Mock.getStoreProduction().then(res => {
       this.productList = res;
     });
-    this.affix1Height = this.$refs['affix1'].offsetHeight+'px';
+    this.affix1Height = this.$refs["affix1"].offsetHeight + "px";
   }
 };
 </script>
@@ -231,7 +260,7 @@ export default {
 #productList .list {
   flex-grow: 1;
   padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding-right: 1rem;
   margin-bottom: 8rem;
 }
 .itemCategory {
@@ -262,11 +291,35 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.listItem .editor {
+.editor {
+  position: absolute;
+  text-align: center;
+  right: 0;
+  bottom: 0;
+  width: 5.5rem;
+  height: auto;
+}
+
+.editor .plus {
   position: absolute;
   right: 0;
   bottom: 0;
-  padding: 0 1rem;
+  z-index: 9;
+}
+.editor .minus {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transition: 0.2s all;
+  transform-origin: 50% 50%;
+  z-index: 1;
+  transform: translateX(2rem) rotate(180deg);
+  opacity: 0;
+}
+
+.editor .minus.show {
+  transform: rotate(0) translateX(0px);
+  opacity: 1;
 }
 .bottomBar {
   height: 4rem;
