@@ -55,24 +55,19 @@
     <div id="productList">
       <div style="display:flex">
         <div class="typeList">
-          <div>
             <Affix :offset="affix1Height">
-              <anchors>
+              <anchors :offset="affix1Height">
                 <anchor-link
+                  class="typeItem"
                   :href="'#anchor'+key"
                   v-for="(item, key,index) in typeList"
                   :key="index"
-                  label
+                  :label="key+$store.getters.typeCount(key)"
                   :offset="affix1Height"
                 >
-                  <div class="typeItem">
-                    <span>{{key}}</span>
-                    <span>{{$store.getters.typeCount(key)}}</span>
-                  </div>
                 </anchor-link>
               </anchors>
             </Affix>
-          </div>
         </div>
         <div class="list">
           <div v-for="(item,key, index) in typeList" :key="index">
@@ -131,7 +126,7 @@ export default {
       productList: [],
       searchBarFixed: false,
       offsetTop: 0,
-      affix1Height: "0px"
+      affix1Height: 0,
     };
   },
   methods: {
@@ -173,7 +168,7 @@ export default {
     Mock.getStoreProduction().then(res => {
       this.productList = res;
     });
-    this.affix1Height = this.$refs["affix1"].offsetHeight + "px";
+    this.affix1Height = this.$refs["affix1"].offsetHeight;
   }
 };
 </script>
@@ -249,12 +244,20 @@ export default {
 #productList .typeList {
   width: 6rem;
   flex-shrink: 0;
-  background: #eee;
-  padding: 0 0.5rem;
+  background: #f3f3f3;
 }
 
 .typeItem {
-  padding: 1rem 0;
+  display: block;
+  width: 100%;
+  padding: 1rem 1rem;
+  color:#666;
+
+}
+.activeAnchorLink{
+  background: #fff;
+  color:#000;
+  font-weight: bold;
 }
 
 #productList .list {

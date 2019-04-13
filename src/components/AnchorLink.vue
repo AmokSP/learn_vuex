@@ -1,23 +1,27 @@
 <template>
-  <a ref="link" :href="href" @click="linkClick">
-    <slot></slot>
-  </a>
+  <a ref="link" :href="href" @click="linkClick">{{label}}</a>
 </template>
 <script>
-
-import Utils from '@/Utils'
+import Utils from "@/Utils";
 function scollTo(hashID, offset) {
   let target = document.querySelector(hashID);
   let pos = Utils.getPosition(target).top;
-    window.scrollTo(0, pos);
+  let scrollTop =
+    window.pageYOffset ||
+    document.documentElement.scrollTop ||
+    document.body.scrollTop;
+  window.scrollTo(0, pos-offset);
 }
-
 
 export default {
   data() {
     return {};
   },
   props: {
+    label: {
+      type: String,
+      default: ""
+    },
     offset: {
       default: 0
     },
@@ -39,8 +43,12 @@ export default {
       if (!this.hashURL) {
         e.preventDefault();
       }
-      console.log(this.offset);
-      scollTo(this.href, Number.parseFloat(this.offset.replace(/px/i, "")));
+      scollTo(this.href, this.offset);
+      let arr = Array.from(document.querySelectorAll(".activeAnchorLink"));
+      arr.forEach(item => {
+        item.classList.remove("activeAnchorLink");
+      });
+      this.$refs["link"].classList.add("activeAnchorLink");
     }
   }
 };

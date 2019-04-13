@@ -4,7 +4,7 @@
 
     <div
       :class="{isFixed:slotFixed,notFixed:!slotFixed}"
-      :style="[originSize,{top:slotFixed?offset:'0rem'}]"
+      :style="[originSize,{top:slotFixed?offset+'px':'0rem'}]"
     >
       <slot></slot>
     </div>
@@ -21,6 +21,7 @@ export default {
   },
   props: {
     offset: {
+      type:null,
       default: "0rem"
     }
   },
@@ -28,8 +29,11 @@ export default {
     offsetInPX() {
       if (typeof this.offset === "string") {
         if (/px$/i.test(this.offset)) {
+          console.log('isPx')
           return Number.parseFloat(this.offset.replace(/px/i, ""));
         } else if (/rem$/i.test(this.offset)) {
+          
+          console.log('isREM')
           let html = document.querySelector("html");
           let rootFontSize;
           if (window.getComputedStyle) {
@@ -42,9 +46,13 @@ export default {
 
           return remValue * rootFontSize;
         } else if (/\d?/.test(this.offset)) {
+          console.log('numberString');
+          
           return Number.parseFloat(this.offset);
         }
       } else {
+        
+          console.log('number');
         return Number.parseFloat(this.offset);
       }
     },

@@ -4,13 +4,19 @@
   </div>
 </template>
 <script>
-import Uitls from "@/Utils"
+import Utils from "@/Utils";
 export default {
   data() {
     return {
       linkElements: [],
       anchors: []
     };
+  },
+  props: {
+    offset: {
+      type: Number,
+      default: 0
+    }
   },
   methods: {
     handleScroll(e) {
@@ -19,13 +25,24 @@ export default {
         document.documentElement.scrollTop ||
         document.body.scrollTop;
 
-      let anchorPos = this.linkElements.map(item => {
-        let elm = document.getElementById(item);
-        return Utils.getPosition(elm);
+      let anchorPos = this.anchors.map(item => {
+        let elm = document.querySelector(item);
+        return Utils.getPosition(elm).top;
       });
-       console.log(anchorPos.findIndex((item,index,arr)=>{
-         return scrollTop<item;
-       }));
+      let index = Math.max(
+        anchorPos.findIndex((item, index, arr) => {
+          return scrollTop < item - this.offset;
+        }) - 1,
+        0
+      );
+      if (document.body.scrollHeight - scrollTop>window.window.innerHeight) {
+        this.linkElements.forEach(item => {
+          item.classList.remove("activeAnchorLink");
+        });
+
+        this.linkElements[index].classList.add("activeAnchorLink");
+      } else {
+      }
     }
   },
   mounted() {
@@ -40,6 +57,7 @@ export default {
     this.linkElements = this.$slots.default.map(item => {
       return item.elm;
     });
+    this.linkElements[0].classList.add("activeAnchorLink");
     console.log(this.anchors);
     console.log(this.linkElements);
   },
