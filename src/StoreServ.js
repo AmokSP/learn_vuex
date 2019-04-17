@@ -2,7 +2,7 @@ import axios from 'axios'
 export default {
     getStoreInfo() {
         return  new Promise((resolve, reject) => {
-            axios.get("/static/storeInfo.json")
+            axios.get("./static/storeInfo.json")
             .then(res=>{
                 resolve(res.data);
             });
@@ -11,7 +11,7 @@ export default {
     },
     getStoreProduction() {
         return  new Promise((resolve, reject) => {
-            axios.get("/static/products.json")
+            axios.get("./static/products.json")
             .then(res=>{
                 resolve(res.data.list);
             });
